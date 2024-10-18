@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bot/internal/db"
 	"bot/internal/service"
 
 	"github.com/gofiber/fiber/v2"
@@ -15,6 +16,7 @@ func main() {
 		Views: engine,
 	}) // create router
 
+	db.Connect()
 	service.Hadlers(app) // start handlers
 
 	app.Listen(":3000") // listen on 3000 port
