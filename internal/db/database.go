@@ -1,33 +1,33 @@
 package db
 
-import "fmt"
+import (
+	"casego/internal/models"
+	"fmt"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+	"log"
+	"os"
+)
 
-var db = 1
+func Connect() (*gorm.DB, error) {
+	host := os.Getenv("DB_HOST")
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	dbname := os.Getenv("DB_NAME")
+	port := os.Getenv("DB_PORT")
 
-type User struct {
-	TelegramId int    `json:"id"`
-	Name       string `json:"name"`
-	Coins      int
-}
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Irkutsk",
+		host, user, password, dbname, port)
 
-func Connect() {
-	//здесь подключение к бд и создание таблицы
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Println("database connection error: ", err)
+		return nil, err
+	}
 
-	// эта функция запускается с мейна один раз, поэтому что сделать так, чтобы переменная для работы с бд была открыта для этого пакета
+	if err := db.AutoMigrate(&models.UserModel{}); err != nil {
+		log.Fatal("failed to migrate database:", err)
+	}
 
-	db++
-
-}
-
-func (u *User) CreateUser() error {
-	//проверка на то, есть ли он в бд
-	//если есть, идем дальше, если нет, создаем.
-
-	//идет возврат ошибки
-
-	u.Coins = 100 // типо бонус при создании нового пользователя
-	fmt.Println(u)
-
-	return nil
-
+	return db, nil
 }
