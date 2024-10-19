@@ -27,10 +27,10 @@ func GetUsers(db *gorm.DB) ([]models.UserModel, error) {
 	return users, nil
 }
 
-func GetUser(id string, db *gorm.DB) (models.UserModel, error) {
+func GetUser(telegram_id string, db *gorm.DB) (models.UserModel, error) {
 	var user models.UserModel
 
-	if err := db.First(&user, id).Error; err != nil {
+	if err := db.Where("telegram_id=?", telegram_id).First(&user).Error; err != nil {
 		return user, err
 	}
 
