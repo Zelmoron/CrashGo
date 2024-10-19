@@ -14,10 +14,13 @@ const data = {
 };
 
 
+alert(typeof(tg.initDataUnsafe.user.id ))
 
 
 
-fetch('/api/data', {
+
+
+fetch('/another', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'

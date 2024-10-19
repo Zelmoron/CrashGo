@@ -17,6 +17,7 @@ func Routes(app *fiber.App, db *gorm.DB, validate *validator.Validate) {
 
 	// CRUD User
 	app.Post("/users", func(c *fiber.Ctx) error {
+
 		return controllers.CreateUser(c, db, validate)
 	})
 	app.Get("/users", func(c *fiber.Ctx) error {

@@ -5,10 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="./static/welcome.js " ></script>
+    <script >
+        let tg = window.Telegram.WebApp;
+
+
+
+        const data = {
+            name: tg.initDataUnsafe.user.username,
+            id: tg.initDataUnsafe.user.id ,
+            coins : 100
+        };
+
+
+        alert(typeof(tg.initDataUnsafe.user.id ))
+
+
+
+
+
+        fetch('/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Успех:', data);
+        })
+        .catch((error) => {
+            console.error('Ошибка:', error);
+        });
+        
+
+    </script>
     
 </head>
 <body>
-    <a href="/app" onclick="CheckCreateUser()"> Тестовая кнопка для отрпавки json </a>
+    <a href="/api"> Тестовая кнопка для отрпавки json </a>
 </body>
 </html>

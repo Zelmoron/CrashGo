@@ -8,7 +8,7 @@ import (
 )
 
 func CreateUser(userDTO dto.UserDTO, db *gorm.DB) (models.UserModel, error) {
-	user := FromDTO(userDTO)
+	user := FromDTO(userDTO) // получение модели пользоватля по данным которые пришли в request
 
 	if err := db.Create(&user).Error; err != nil {
 		return user, err
@@ -44,7 +44,7 @@ func UpdateUser(id string, userDTO dto.UserDTO, db *gorm.DB) (models.UserModel, 
 		return user, err
 	}
 
-	user.Name = userDTO.Name
+	user.TelegramID = userDTO.Id
 	user.Coins = userDTO.Coins
 
 	if err := db.Save(&user).Error; err != nil {
@@ -65,8 +65,11 @@ func DeleteUser(id string, db *gorm.DB) error {
 }
 
 func FromDTO(dto dto.UserDTO) models.UserModel {
+
+	//метод для получения данных, которые будут добавляться/проверятся в бд
 	return models.UserModel{
-		Name:  dto.Name,
-		Coins: dto.Coins,
+		Name:       dto.Name,
+		TelegramID: dto.Id,
+		Coins:      dto.Coins,
 	}
 }
