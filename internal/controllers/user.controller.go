@@ -3,6 +3,9 @@ package controllers
 import (
 	"casego/internal/dto"
 	"casego/internal/services"
+	"fmt"
+	"log"
+	"strconv"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -10,15 +13,31 @@ import (
 )
 
 func CreateUser(c *fiber.Ctx, db *gorm.DB, validate *validator.Validate) error {
+	//Метод для добавления пользователя в бд или проверки на его нахождение в ней
 	var userDTO dto.UserDTO
+
 	if err := c.BodyParser(&userDTO); err != nil { // parsing input data
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid request"})
-	}
+	} // получаем из тела запроса информацию о пользователе
 
 	if validationErr := validate.Struct(userDTO); validationErr != nil { // DTO validation
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": validationErr.Error()})
+	} // проверяем валидность
+
+	fmt.Print(userDTO) // просто для теста, можно удалить, но пока не советую
+
+	//TODO
+	// Сделать проверку на то, есть ли пользователь в бд
+
+	telegramID := strconv.Itoa(userDTO.Id)
+	_, err := services.GetUser(telegramID, db)
+
+	if err == nil {
+		log.Println("Пользователь есть в бд")
+		return c.SendStatus(200)
 	}
 
+	log.Println("Новый пользоваетль")
 	user, err := services.CreateUser(userDTO, db) // calling business logic from the service
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})

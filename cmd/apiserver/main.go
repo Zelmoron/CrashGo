@@ -8,9 +8,9 @@ import (
 	"casego/internal/db"
 	"casego/internal/logic"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
-	"github.com/go-playground/validator/v10"
 	"github.com/joho/godotenv"
 )
 
@@ -25,6 +25,10 @@ func main() {
 	}
 
 	database, err := db.Connect() // connecting to the DB
+
+	if err != nil {
+		return
+	}
 
 	engine := html.New("./views", ".html") // connecting to html
 

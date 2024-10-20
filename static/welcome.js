@@ -2,22 +2,19 @@
 
 
 
-
-
 let tg = window.Telegram.WebApp;
 
 
 
 const data = {
     name: tg.initDataUnsafe.user.username,
-    id: tg.initDataUnsafe.user.id 
+    id: tg.initDataUnsafe.user.id ,
+    coins : 100
 };
 
 
 
-
-
-fetch('/api/data', {
+fetch('/users', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -30,4 +27,12 @@ fetch('/api/data', {
 })
 .catch((error) => {
     console.error('Ошибка:', error);
+});
+
+document.getElementById('coin').addEventListener('click', function () {
+    
+    this.style.transform = 'rotateY(180deg)';
+    setTimeout(() => {
+        window.location.href = '/api'; // Замена на нужный URL
+    }, 1000);
 });
