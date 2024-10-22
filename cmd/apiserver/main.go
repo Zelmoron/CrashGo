@@ -17,6 +17,7 @@ import (
 var validate *validator.Validate
 
 func main() {
+
 	validate = validator.New() // initializing the validator
 
 	err := godotenv.Load() // loading environment variables
@@ -39,5 +40,7 @@ func main() {
 	logic.Routes(app, database, validate) // starting handlers
 
 	PORT := os.Getenv("PORT")
+
 	app.Listen(fmt.Sprintf(":%s", PORT)) // listening on port 3000
+
 }

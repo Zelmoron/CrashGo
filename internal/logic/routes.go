@@ -3,6 +3,8 @@ package logic
 import (
 	"casego/internal/controllers"
 	"casego/internal/pages"
+	"fmt"
+	"time"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -10,6 +12,10 @@ import (
 )
 
 func Routes(app *fiber.App, db *gorm.DB, validate *validator.Validate) {
+	for i := 1; i < 10; i++ {
+		time.Sleep(time.Second * 1)
+		fmt.Printf("Сервер прогрузится через %d \n", i)
+	}
 	app.Static("/static", "./static") // connection css and js
 
 	app.Get("/", pages.WelcomePage) // rendering the welcome page
@@ -31,6 +37,14 @@ func Routes(app *fiber.App, db *gorm.DB, validate *validator.Validate) {
 	})
 	app.Delete("/users/:id", func(c *fiber.Ctx) error {
 		return controllers.DeleteUser(c, db)
+	})
+
+	app.Post("/random", func(c *fiber.Ctx) error {
+		return controllers.GetRandomNumber(c, db)
+	})
+
+	app.Post("/inventory", func(c *fiber.Ctx) error {
+		return controllers.GetInventroty(c, db)
 	})
 
 	// app.ListenTLS(":3000", "localhost.crt", "localhost.key")
