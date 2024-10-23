@@ -1,15 +1,15 @@
 package main
 
 import (
+	"casego/internal/db"
+	"casego/internal/logic"
 	"fmt"
 	"log"
 	"os"
 
-	"casego/internal/db"
-	"casego/internal/logic"
-
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/template/html/v2"
 	"github.com/joho/godotenv"
 )
@@ -17,6 +17,7 @@ import (
 var validate *validator.Validate
 
 func main() {
+
 	validate = validator.New() // initializing the validator
 
 	err := godotenv.Load() // loading environment variables
@@ -36,8 +37,12 @@ func main() {
 		Views: engine,
 	})
 
-	logic.Routes(app, database, validate) // starting handlers
+	app.Use(cors.New())
+
+	logic.Routes(app, database, validate) // starting handlerss
 
 	PORT := os.Getenv("PORT")
+
 	app.Listen(fmt.Sprintf(":%s", PORT)) // listening on port 3000
+
 }

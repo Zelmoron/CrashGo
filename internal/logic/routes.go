@@ -10,6 +10,7 @@ import (
 )
 
 func Routes(app *fiber.App, db *gorm.DB, validate *validator.Validate) {
+
 	app.Static("/static", "./static") // connection css and js
 
 	app.Get("/", pages.WelcomePage) // rendering the welcome page
@@ -31,6 +32,14 @@ func Routes(app *fiber.App, db *gorm.DB, validate *validator.Validate) {
 	})
 	app.Delete("/users/:id", func(c *fiber.Ctx) error {
 		return controllers.DeleteUser(c, db)
+	})
+
+	app.Post("/random", func(c *fiber.Ctx) error {
+		return controllers.GetRandomNumber(c, db)
+	})
+
+	app.Get("/inventory/:id", func(c *fiber.Ctx) error {
+		return controllers.GetInventroty(c, db)
 	})
 
 	// app.ListenTLS(":3000", "localhost.crt", "localhost.key")

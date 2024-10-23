@@ -3,10 +3,11 @@ package db
 import (
 	"casego/internal/models"
 	"fmt"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"log"
 	"os"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 func Connect() (*gorm.DB, error) {
@@ -27,6 +28,17 @@ func Connect() (*gorm.DB, error) {
 
 	if err := db.AutoMigrate(&models.UserModel{}); err != nil {
 		log.Fatal("failed to migrate database:", err)
+		panic("Fatal error - dont create databases")
+	}
+
+	if err := db.AutoMigrate(&models.ItemsModel{}); err != nil {
+		log.Fatal("failed to migrate database:", err)
+		panic("Fatal error - dont create databases")
+	}
+
+	if err := db.AutoMigrate(&models.InventoryModel{}); err != nil {
+		log.Fatal("failed to migrate database:", err)
+		panic("Fatal error - dont create databases")
 	}
 
 	return db, nil
