@@ -56,15 +56,12 @@ func GetRandomNumber(c *fiber.Ctx, db *gorm.DB) error {
 
 func GetInventroty(c *fiber.Ctx, db *gorm.DB) error {
 
-	var inventoryResp InventoryRequest
-	if err := c.BodyParser(&inventoryResp); err != nil { // parsing input data
-		fmt.Println("bad")
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid request"})
-	}
+	id := c.Params("id")
+	fmt.Println(id)
 
 	var inventory []models.InventoryModel
 
-	if err := db.Where("telegram_id=?", inventoryResp.TelegramID).Find(&inventory).Error; err != nil {
+	if err := db.Where("telegram_id=?", id).Find(&inventory).Error; err != nil {
 		return err
 	}
 
@@ -78,8 +75,6 @@ func GetInventroty(c *fiber.Ctx, db *gorm.DB) error {
 	if err != nil {
 		panic(err)
 	}
-
-	fmt.Println(string(jsonBytes))
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "inv", "data": string(jsonBytes)})
 
