@@ -71,6 +71,11 @@ func GetInventroty(c *fiber.Ctx, db *gorm.DB) error {
 		inv = append(inv, Inventory{v.Name, v.Cost, v.Type})
 	}
 
+	if len(inv) < 1 {
+
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "inv", "data": inv})
+	}
+
 	jsonBytes, err := json.Marshal(&inv)
 	if err != nil {
 		panic(err)
