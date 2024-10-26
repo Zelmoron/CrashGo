@@ -3,6 +3,7 @@ package logic
 import (
 	"casego/internal/controllers"
 	"casego/internal/pages"
+	"log"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -18,6 +19,7 @@ func Routes(app *fiber.App, db *gorm.DB, validate *validator.Validate) {
 
 	// CRUD User
 	app.Post("/users", func(c *fiber.Ctx) error {
+		log.Println(c.IP())
 
 		return controllers.CreateUser(c, db, validate)
 	})

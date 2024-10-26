@@ -70,6 +70,6 @@ func FromDTO(dto dto.UserDTO) models.UserModel {
 	return models.UserModel{
 		Name:       dto.Name,
 		TelegramID: dto.Id,
-		Coins:      dto.Coins,
+		Coins:      100,
 	}
 }

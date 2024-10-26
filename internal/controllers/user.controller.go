@@ -21,13 +21,10 @@ func CreateUser(c *fiber.Ctx, db *gorm.DB, validate *validator.Validate) error {
 	} // получаем из тела запроса информацию о пользователе
 
 	if validationErr := validate.Struct(userDTO); validationErr != nil { // DTO validation
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": validationErr.Error()})
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{"error": validationErr.Error()})
 	} // проверяем валидность
 
 	fmt.Print(userDTO) // просто для теста, можно удалить, но пока не советую
-
-	//TODO
-	// Сделать проверку на то, есть ли пользователь в бд
 
 	telegramID := strconv.Itoa(userDTO.Id)
 	_, err := services.GetUser(telegramID, db)
