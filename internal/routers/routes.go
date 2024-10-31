@@ -3,6 +3,7 @@ package logic
 import (
 	"casego/internal/controllers"
 	"casego/internal/pages"
+	"log"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -18,6 +19,7 @@ func Routes(app *fiber.App, db *gorm.DB, validate *validator.Validate) {
 
 	// CRUD User
 	app.Post("/users", func(c *fiber.Ctx) error {
+		log.Println(c.IP())
 
 		return controllers.CreateUser(c, db, validate)
 	})
@@ -34,12 +36,16 @@ func Routes(app *fiber.App, db *gorm.DB, validate *validator.Validate) {
 		return controllers.DeleteUser(c, db)
 	})
 
-	app.Post("/random", func(c *fiber.Ctx) error {
-		return controllers.GetRandomNumber(c, db)
-	})
+	// app.Post("/random", func(c *fiber.Ctx) error {
+	// 	return controllers.GetRandomNumber(c, db)
+	// })
 
 	app.Get("/inventory/:id", func(c *fiber.Ctx) error {
 		return controllers.GetInventroty(c, db)
+	})
+
+	app.Get("/dropitem/:id", func(c *fiber.Ctx) error {
+		return controllers.DropItem(c, db)
 	})
 
 	// app.ListenTLS(":3000", "localhost.crt", "localhost.key")
