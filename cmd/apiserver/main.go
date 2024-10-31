@@ -2,7 +2,7 @@ package main
 
 import (
 	"casego/internal/db"
-	"casego/internal/logic"
+	logic "casego/internal/routers"
 	"fmt"
 	"log"
 	"os"
@@ -11,15 +11,17 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/gofiber/template/html/v2"
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
+	"gorm.io/gorm"
 )
 
-var validate *validator.Validate
+var (
+	validate *validator.Validate
+	database *gorm.DB
+)
 
-func main() {
-
+func init() {
 	validate = validator.New() // initializing the validator
 
 	err := godotenv.Load() // loading environment variables
@@ -27,18 +29,18 @@ func main() {
 		log.Fatalf("error loading .env file: %v", err)
 	}
 
-	database, err := db.Connect() // connecting to the DB
+	database, err = db.Connect() // connecting to the DB
 
 	if err != nil {
 		return
 	}
+	fmt.Println("Запуск сервера")
 
-	engine := html.New("./views", ".html") // connecting to html
+}
 
-	app := fiber.New(fiber.Config{ // creating a router
-		Views: engine,
-	})
+func main() {
 
+	app := fiber.New()
 	app.Use(cors.New(), logger.New()) //use cors and logger
 
 	// app.Use(limiter.New(limiter.Config{

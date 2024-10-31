@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"casego/internal/dto"
+	dto "casego/internal/requests"
 	"casego/internal/services"
 	"fmt"
 	"log"
@@ -13,8 +13,9 @@ import (
 )
 
 func CreateUser(c *fiber.Ctx, db *gorm.DB, validate *validator.Validate) error {
+
 	//Метод для добавления пользователя в бд или проверки на его нахождение в ней
-	var userDTO dto.UserDTO
+	var userDTO dto.UserRequest
 
 	if err := c.BodyParser(&userDTO); err != nil { // parsing input data
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid request"})
@@ -65,7 +66,7 @@ func GetUser(c *fiber.Ctx, db *gorm.DB) error {
 
 func UpdateUser(c *fiber.Ctx, db *gorm.DB, validate *validator.Validate) error {
 	id := c.Params("id")
-	var userDTO dto.UserDTO
+	var userDTO dto.UserRequest
 
 	if err := c.BodyParser(&userDTO); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid request"})

@@ -36,12 +36,16 @@ func Routes(app *fiber.App, db *gorm.DB, validate *validator.Validate) {
 		return controllers.DeleteUser(c, db)
 	})
 
-	app.Post("/random", func(c *fiber.Ctx) error {
-		return controllers.GetRandomNumber(c, db)
-	})
+	// app.Post("/random", func(c *fiber.Ctx) error {
+	// 	return controllers.GetRandomNumber(c, db)
+	// })
 
 	app.Get("/inventory/:id", func(c *fiber.Ctx) error {
 		return controllers.GetInventroty(c, db)
+	})
+
+	app.Get("/dropitem/:id", func(c *fiber.Ctx) error {
+		return controllers.DropItem(c, db)
 	})
 
 	// app.ListenTLS(":3000", "localhost.crt", "localhost.key")
