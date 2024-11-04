@@ -2,7 +2,6 @@ package logic
 
 import (
 	"casego/internal/controllers"
-	"casego/internal/pages"
 	"log"
 
 	"github.com/go-playground/validator/v10"
@@ -11,11 +10,6 @@ import (
 )
 
 func Routes(app *fiber.App, db *gorm.DB, validate *validator.Validate) {
-
-	app.Static("/static", "./static") // connection css and js
-
-	app.Get("/", pages.WelcomePage) // rendering the welcome page
-	app.Get("/api", pages.Index)    // rendering the main page
 
 	// CRUD User
 	app.Post("/users", func(c *fiber.Ctx) error {

@@ -73,6 +73,8 @@ func DropItem(c *fiber.Ctx, db *gorm.DB) error {
 		Type:       caseData.Items[1].Type,
 		Image:      caseData.Items[1].Image,
 	}
+	//TODO
+	//Из таблицы items по id вытаскивать предмет и запихиват его в инвентарь!
 
 	if err := db.Create(&create).Error; err != nil {
 		return err
