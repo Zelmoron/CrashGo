@@ -16,6 +16,7 @@ type (
 		CreateUser(int, string) models.UserModel
 		GetInventory(int) []service.Inventory
 		GetCases() []service.Cases
+		GetWeapons(int) []service.Weapons
 	}
 
 	Endpoint struct {
@@ -28,6 +29,9 @@ type UserRequest struct {
 	Name string `json:"name" ` // имя пользователя
 	Id   int    `json:"id"`    // айди телеграмма!!!!
 
+}
+type CaseRequest struct {
+	Id int `json:"id"`
 }
 
 func New(service Service) *Endpoint {
@@ -82,7 +86,7 @@ func (e *Endpoint) GetInventory(c *fiber.Ctx) error {
 		panic(err)
 	}
 
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "inv", "data": string(jsonBytes)})
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "ok", "data": string(jsonBytes)})
 
 }
 
@@ -92,7 +96,7 @@ func (e *Endpoint) GetCases(c *fiber.Ctx) error {
 
 	if len(response) < 1 {
 
-		return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "inv", "data": response})
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "ok", "data": response})
 	}
 
 	jsonBytes, err := json.Marshal(&response)
@@ -100,6 +104,17 @@ func (e *Endpoint) GetCases(c *fiber.Ctx) error {
 		panic(err)
 	}
 
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "inv", "data": string(jsonBytes)})
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "ok", "data": string(jsonBytes)})
 
+}
+
+func (e *Endpoint) GetWeapons(c *fiber.Ctx) error {
+	var cases CaseRequest
+
+	if err := c.BodyParser(&cases); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"status": "BadRequest"})
+	}
+	response := e.service.GetWeapons(cases.Id)
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "ok", "data": response})
 }
