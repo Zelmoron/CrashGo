@@ -25,9 +25,9 @@ func New() *App {
 
 	a.app = fiber.New() //создаем приложение на Fiber
 
-	a.service = service.New() //получаем с.Service
+	a.service = service.New(db) //получаем с.Service
 
-	a.endpoint = endpoint.New(a.service, db) //Получаем с.Endpoints( перед этим мы посылаем структуру Service в интерфейс, а также переменную db)
+	a.endpoint = endpoint.New(a.service) //Получаем с.Endpoints( перед этим мы посылаем структуру Service в интерфейс, а также переменную db)
 
 	a.routers() //Вызываем функцию для роутеров
 
@@ -37,7 +37,8 @@ func New() *App {
 
 func (a *App) routers() {
 	//Здесь хранятся роутеры
-	a.app.Get("/users", a.endpoint.GetUsers) //Метод для получения конкретного пользователя
+	a.app.Get("/users", a.endpoint.GetUsers)    //Метод для получения конкретного пользователя
+	a.app.Post("/users", a.endpoint.CreateUser) //Метод для проверки/добавления  пользователя
 }
 
 func (a *App) Run() {

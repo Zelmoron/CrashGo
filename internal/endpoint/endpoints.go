@@ -1,32 +1,59 @@
 package endpoint
 
 import (
+	"CaseGo/internal/models"
+	"fmt"
+	"net/http"
+
 	"github.com/gofiber/fiber/v2"
-	"gorm.io/gorm"
 )
 
 type (
 	Service interface {
 		//Определяем методы
-		GetUsers(database *gorm.DB)
+		GetUsers(int) models.UserModel
+		CreateUser()
 	}
 
 	Endpoint struct {
-		service Service  //поле для интерфейса
-		db      *gorm.DB //поле для базы данных
+		service Service //поле для интерфейса
+
 	}
 )
 
-func New(service Service, db *gorm.DB) *Endpoint {
-	//Констркутор для с. Endpoint
+type UserRequest struct {
+	Name string `json:"name" ` // имя пользователя
+	Id   int    `json:"id"`    // айди телеграмма!!!!
+
+}
+
+func New(service Service) *Endpoint {
+	//Возвращаем с . Endpoint
 	return &Endpoint{
 		service: service, //Передали структуру Service, и поместили в поле service типа Service(Интерфейс)
-		db:      db,      // Поле для бд
+
 	}
 }
 
+func (e *Endpoint) CreateUser(c *fiber.Ctx) error {
+	var user UserRequest
+
+	if err := c.BodyParser(&user); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"status": "BadRequest"})
+	}
+	fmt.Println(user)
+	return nil
+
+}
 func (e *Endpoint) GetUsers(c *fiber.Ctx) error {
 	//Метод для получение пользователя
-	e.service.GetUsers(e.db)
-	return nil
+	var user UserRequest
+	if err := c.BodyParser(&user); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"status": "BadRequest"})
+	}
+	response := e.service.GetUsers(user.Id)
+
+	return c.Status(http.StatusAccepted).JSON(fiber.Map{
+		"data": response,
+	})
 }

@@ -2,24 +2,34 @@ package service
 
 import (
 	"CaseGo/internal/models"
-	"fmt"
 
 	"gorm.io/gorm"
 )
 
 type Service struct {
+	db *gorm.DB //поле для базы данных
 }
 
-func New() *Service {
-	return &Service{}
+func New(db *gorm.DB) *Service {
+	//возвращаем указатель на с.Service
+	return &Service{
+
+		db: db, // Поле для бд
+	}
 }
 
-func (s *Service) GetUsers(database *gorm.DB) {
+func (s *Service) GetUsers(id int) models.UserModel {
+	//бизнес логика для получения пользователя
+
 	var user models.UserModel
 
-	if err := database.Where("telegram_id=?", 1628918728).First(&user).Error; err != nil {
-		fmt.Println("1")
+	if err := s.db.Where("telegram_id=?", id).First(&user).Error; err != nil {
+		return user
 	}
 
-	fmt.Println(user)
+	return user
+}
+
+func (s *Service) CreateUser() {
+
 }
