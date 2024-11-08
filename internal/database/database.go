@@ -1,0 +1,78 @@
+package database
+
+import (
+	"CaseGo/internal/models"
+	"fmt"
+	"log"
+	"os"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+)
+
+type Database struct{}
+
+func New() *Database {
+	return &Database{}
+}
+
+func (d *Database) CreateTables() *gorm.DB {
+
+	host := os.Getenv("DB_HOST")
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	dbname := os.Getenv("DB_NAME")
+	port := os.Getenv("DB_PORT")
+
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Irkutsk",
+		host, user, password, dbname, port)
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatal("database connection error: ", err)
+
+	}
+
+	if err := db.AutoMigrate(&models.UserModel{}); err != nil {
+		log.Fatal("failed to migrate database:", err)
+		panic("Fatal error - dont create databases")
+	}
+
+	if err := db.AutoMigrate(&models.InventoryModel{}); err != nil {
+		log.Fatal("failed to migrate database:", err)
+		panic("Fatal error - dont create databases")
+	}
+	if err := db.AutoMigrate(&models.ItemModel{}); err != nil {
+		log.Fatal("failed to migrate database:", err)
+		panic("Fatal error - dont create databases")
+	}
+	if err := db.AutoMigrate(&models.CasesModel{}); err != nil {
+		log.Fatal("failed to migrate database:", err)
+		panic("Fatal error - dont create databases")
+	}
+
+	case1 := models.CasesModel{Name: "Case 1", Image: "/sd"}
+	case2 := models.CasesModel{Name: "Case 2", Image: "/sd"}
+	case3 := models.CasesModel{Name: "Case 3", Image: "/sd"}
+
+	db.Create(&case1)
+	db.Create(&case2)
+	db.Create(&case3)
+
+	items := []models.ItemModel{
+		{Name: "Item 1.1", Cost: 1000, Type: "gun", Image: "/", CaseID: case1.ID},
+		{Name: "Item 1.2", Cost: 2000, Type: "gun", Image: "/", CaseID: case1.ID},
+		{Name: "Item 2.1", Cost: 3000, Type: "gun", Image: "/", CaseID: case2.ID},
+		{Name: "Item 3.1", Cost: 3000, Type: "gun", Image: "/", CaseID: case3.ID},
+		{Name: "Item 3.2", Cost: 4000, Type: "gun", Image: "/", CaseID: case3.ID},
+	}
+
+	for _, item := range items {
+		db.Create(&item)
+	}
+
+	log.Println("Таблицы успешно созданы")
+
+	return db
+
+}
