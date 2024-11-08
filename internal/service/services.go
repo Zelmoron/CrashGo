@@ -2,6 +2,7 @@ package service
 
 import (
 	"CaseGo/internal/models"
+	"fmt"
 	"log"
 
 	"gorm.io/gorm"
@@ -98,4 +99,31 @@ func (s *Service) GetCases() []Cases {
 		casesAll = append(casesAll, Cases{v.ID, v.Name, v.Image})
 	}
 	return casesAll
+}
+
+type Weapons struct {
+	Name   string `json:"weapon_name"`
+	Skin   string `json:"skin_name"`
+	Rarity string `json:"rariry"`
+	Img    string `json:"steam_image"`
+}
+
+func (s *Service) GetWeapons(id int) []Weapons {
+	var cases models.CasesModel
+
+	if err := s.db.Preload("Items").First(&cases, id).Error; err != nil {
+		fmt.Println(1)
+		return []Weapons{}
+	}
+	weaponsData := cases.Items
+
+	var weapons []Weapons
+
+	for _, v := range weaponsData {
+		weapons = append(weapons, Weapons{Name: v.Name, Skin: v.Name, Rarity: v.Type, Img: v.Image})
+
+	}
+
+	return weapons
+
 }

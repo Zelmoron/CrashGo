@@ -87,7 +87,7 @@ func (d *Database) CreateTables() *gorm.DB {
 	}
 
 	for _, item := range items {
-		db.FirstOrCreate(&item)
+		db.Create(&item)
 	}
 
 	log.Println("Таблицы успешно созданы")
