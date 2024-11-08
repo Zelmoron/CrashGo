@@ -50,15 +50,34 @@ func (d *Database) CreateTables() *gorm.DB {
 		log.Fatal("failed to migrate database:", err)
 		panic("Fatal error - dont create databases")
 	}
+	// Сначала создаем все кейсы
+	var case1, case2, case3 models.CasesModel
 
-	case1 := models.CasesModel{Name: "Решающий момент", Image: "https://qliquiz.github.io/CaSeGO-front/images/cases/decisive_moment.png"}
-	case2 := models.CasesModel{Name: "Гидра", Image: "https://qliquiz.github.io/CaSeGO-front/images/cases/hydra.png"}
-	case3 := models.CasesModel{Name: "Фальшион", Image: "https://qliquiz.github.io/CaSeGO-front/images/cases/falchion.png"}
+	// Проверяем, существует ли уже кейс "Решающий момент"
+	result := db.Where("name = ?", "Решающий момент").First(&case1)
+	if result.Error != nil {
+		// Если нет, создаем новый
+		case1 = models.CasesModel{Name: "Решающий момент", Image: "https://qliquiz.github.io/CaSeGO-front/images/cases/decisive_moment.png"}
+		db.Create(&case1)
+	}
 
-	db.Create(&case1)
-	db.Create(&case2)
-	db.Create(&case3)
+	// Проверяем, существует ли уже кейс "Гидра"
+	result = db.Where("name = ?", "Гидра").First(&case2)
+	if result.Error != nil {
+		// Если нет, создаем новый
+		case2 = models.CasesModel{Name: "Гидра", Image: "https://qliquiz.github.io/CaSeGO-front/images/cases/hydra.png"}
+		db.Create(&case2)
+	}
 
+	// Проверяем, существует ли уже кейс "Фальшион"
+	result = db.Where("name = ?", "Фальшион").First(&case3)
+	if result.Error != nil {
+		// Если нет, создаем новый
+		case3 = models.CasesModel{Name: "Фальшион", Image: "https://qliquiz.github.io/CaSeGO-front/images/cases/falchion.png"}
+		db.Create(&case3)
+	}
+
+	// Теперь создаем элементы, связанные с кейсами
 	items := []models.ItemModel{
 		{Name: "Item 1.1", Cost: 1000, Type: "gun", Image: "/", CaseID: case1.ID},
 		{Name: "Item 1.2", Cost: 2000, Type: "gun", Image: "/", CaseID: case1.ID},
@@ -68,7 +87,7 @@ func (d *Database) CreateTables() *gorm.DB {
 	}
 
 	for _, item := range items {
-		db.Create(&item)
+		db.FirstOrCreate(&item)
 	}
 
 	log.Println("Таблицы успешно созданы")
