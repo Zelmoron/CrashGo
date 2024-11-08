@@ -51,9 +51,9 @@ func (d *Database) CreateTables() *gorm.DB {
 		panic("Fatal error - dont create databases")
 	}
 
-	case1 := models.CasesModel{Name: "Case 1", Image: "/sd"}
-	case2 := models.CasesModel{Name: "Case 2", Image: "/sd"}
-	case3 := models.CasesModel{Name: "Case 3", Image: "/sd"}
+	case1 := models.CasesModel{Name: "Решающий момент", Image: "https://qliquiz.github.io/CaSeGO-front/images/cases/decisive_moment.png"}
+	case2 := models.CasesModel{Name: "Гидра", Image: "https://qliquiz.github.io/CaSeGO-front/images/cases/hydra.png"}
+	case3 := models.CasesModel{Name: "Фальшион", Image: "https://qliquiz.github.io/CaSeGO-front/images/cases/falchion.png"}
 
 	db.Create(&case1)
 	db.Create(&case2)
