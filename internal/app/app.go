@@ -6,6 +6,8 @@ import (
 	"CaseGo/internal/service"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
 type App struct {
@@ -24,6 +26,7 @@ func New() *App {
 	db := a.database.CreateTables() //Получаем переменую тип *gorm.DB из метода структуры Database
 
 	a.app = fiber.New() //создаем приложение на Fiber
+	a.app.Use(cors.New(), logger.New())
 
 	a.service = service.New(db) //получаем с.Service
 
