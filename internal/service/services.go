@@ -120,7 +120,7 @@ func (s *Service) GetWeapons(id int) []Weapons {
 	var weapons []Weapons
 
 	for _, v := range weaponsData {
-		weapons = append(weapons, Weapons{Name: v.Name, Skin: v.Name, Rarity: v.Type, Img: v.Image})
+		weapons = append(weapons, Weapons{Name: v.WeaponName, Skin: v.SkinName, Rarity: v.Type, Img: v.Image})
 
 	}
 

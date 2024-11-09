@@ -79,11 +79,11 @@ func (d *Database) CreateTables() *gorm.DB {
 
 	// Теперь создаем элементы, связанные с кейсами
 	items := []models.ItemModel{
-		{Name: "Item 1.1", Cost: 1000, Type: "gun", Image: "/", CaseID: case1.ID},
-		{Name: "Item 1.2", Cost: 2000, Type: "gun", Image: "/", CaseID: case1.ID},
-		{Name: "Item 2.1", Cost: 3000, Type: "gun", Image: "/", CaseID: case2.ID},
-		{Name: "Item 3.1", Cost: 3000, Type: "gun", Image: "/", CaseID: case3.ID},
-		{Name: "Item 3.2", Cost: 4000, Type: "gun", Image: "/", CaseID: case3.ID},
+		{WeaponName: "M4A4", SkinName: "Звездный крейсер", Type: "covert", Image: "https://qliquiz.github.io/CaSeGO-front/images/m4a4.png", CaseID: case1.ID},
+		{WeaponName: "FAMAS", SkinName: "Валентность", Type: "restricted", Image: "https://qliquiz.github.io/CaSeGO-front/images/famas_valenty.png", CaseID: case1.ID},
+		{WeaponName: "★ Нож Боуи", SkinName: "Убийство", Type: "rare", Image: "https://qliquiz.github.io/CaSeGO-front/images/knife_bowie_kill.png", CaseID: case1.ID},
+		{WeaponName: "AWP", SkinName: "История о драконе", Type: "covert", Image: "https://qliquiz.github.io/CaSeGO-front/images/awp_dragon_lore.png", CaseID: case1.ID},
+		{WeaponName: "AK-47", SkinName: "Неоновая революция", Type: "covert", Image: "https://qliquiz.github.io/CaSeGO-front/images/ak47_neon_revolution.png", CaseID: case1.ID},
 	}
 
 	for _, item := range items {
