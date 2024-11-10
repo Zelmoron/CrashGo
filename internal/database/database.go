@@ -59,6 +59,20 @@ func (d *Database) CreateTables() *gorm.DB {
 		// Если нет, создаем новый
 		case1 = models.CasesModel{Name: "Решающий момент", Image: "https://qliquiz.github.io/CaSeGO-front/images/cases/decisive_moment.png"}
 		db.Create(&case1)
+
+		// Теперь создаем элементы, связанные с кейсами
+		items := []models.ItemModel{
+			{WeaponName: "M4A4", SkinName: "Звездный крейсер", Type: "covert", Image: "https://qliquiz.github.io/CaSeGO-front/images/weapons/m4a4.png", CaseID: case1.ID},
+			{WeaponName: "FAMAS", SkinName: "Валентность", Type: "restricted", Image: "https://qliquiz.github.io/CaSeGO-front/images/weapons/famas_valenty.png", CaseID: case1.ID},
+			{WeaponName: "★ Нож Боуи", SkinName: "Убийство", Type: "rare", Image: "https://qliquiz.github.io/CaSeGO-front/images/weapons/knife_bowie_kill.png", CaseID: case1.ID},
+			{WeaponName: "AWP", SkinName: "История о драконе", Type: "covert", Image: "https://qliquiz.github.io/CaSeGO-front/images/weapons/awp_dragon_lore.png", CaseID: case1.ID},
+			{WeaponName: "AK-47", SkinName: "Неоновая революция", Type: "covert", Image: "https://qliquiz.github.io/CaSeGO-front/images/weapons/ak47_neon_revolution.png", CaseID: case1.ID},
+		}
+
+		for _, item := range items {
+			db.Create(&item)
+		}
+
 	}
 
 	// Проверяем, существует ли уже кейс "Гидра"
@@ -75,19 +89,6 @@ func (d *Database) CreateTables() *gorm.DB {
 		// Если нет, создаем новый
 		case3 = models.CasesModel{Name: "Фальшион", Image: "https://qliquiz.github.io/CaSeGO-front/images/cases/falchion.png"}
 		db.Create(&case3)
-	}
-
-	// Теперь создаем элементы, связанные с кейсами
-	items := []models.ItemModel{
-		{WeaponName: "M4A4", SkinName: "Звездный крейсер", Type: "covert", Image: "https://qliquiz.github.io/CaSeGO-front/images/weapons/m4a4.png", CaseID: case1.ID},
-		{WeaponName: "FAMAS", SkinName: "Валентность", Type: "restricted", Image: "https://qliquiz.github.io/CaSeGO-front/images/weapons/famas_valenty.png", CaseID: case1.ID},
-		{WeaponName: "★ Нож Боуи", SkinName: "Убийство", Type: "rare", Image: "https://qliquiz.github.io/CaSeGO-front/images/weapons/knife_bowie_kill.png", CaseID: case1.ID},
-		{WeaponName: "AWP", SkinName: "История о драконе", Type: "covert", Image: "https://qliquiz.github.io/CaSeGO-front/images/weapons/awp_dragon_lore.png", CaseID: case1.ID},
-		{WeaponName: "AK-47", SkinName: "Неоновая революция", Type: "covert", Image: "https://qliquiz.github.io/CaSeGO-front/images/weapons/ak47_neon_revolution.png", CaseID: case1.ID},
-	}
-
-	for _, item := range items {
-		db.Create(&item)
 	}
 
 	log.Println("Таблицы успешно созданы")
