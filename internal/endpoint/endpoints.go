@@ -124,5 +124,5 @@ func (e *Endpoint) GetWeapons(c *fiber.Ctx) error {
 		panic(err)
 	}
 
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "ok", "data": string(jsonBytes)})
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "ok", "data": string(jsonBytes), "id": params})
 }
