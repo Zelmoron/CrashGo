@@ -102,10 +102,11 @@ func (s *Service) GetCases() []Cases {
 }
 
 type Weapons struct {
-	Name   string `json:"weapon_name"`
-	Skin   string `json:"skin_name"`
-	Rarity string `json:"rariry"`
-	Img    string `json:"steam_image"`
+	Name    string `json:"weapon_name"`
+	Skin    string `json:"skin_name"`
+	Rarity  string `json:"rariry"`
+	Img     string `json:"steam_image"`
+	IsLozer bool   `json:"isLozer"`
 }
 
 func (s *Service) GetWeapons(id int) []Weapons {
@@ -120,7 +121,7 @@ func (s *Service) GetWeapons(id int) []Weapons {
 	var weapons []Weapons
 
 	for _, v := range weaponsData {
-		weapons = append(weapons, Weapons{Name: v.WeaponName, Skin: v.SkinName, Rarity: v.Type, Img: v.Image})
+		weapons = append(weapons, Weapons{Name: v.WeaponName, Skin: v.SkinName, Rarity: v.Type, Img: v.Image, IsLozer: false})
 
 	}
 

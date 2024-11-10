@@ -44,7 +44,7 @@ func (a *App) routers() {
 	a.app.Post("/users", a.endpoint.CreateUser)      //Метод для проверки/добавления  пользователя
 	a.app.Get("/inventory", a.endpoint.GetInventory) //Метод для получения инвентаря
 	a.app.Get("/cases/cases", a.endpoint.GetCases)   //Метод для получения всех кейсов
-	a.app.Get("/cases/weapons", a.endpoint.GetWeapons)
+	a.app.Get("/cases/weapons/:id", a.endpoint.GetWeapons)
 }
 
 func (a *App) Run() {

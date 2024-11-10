@@ -5,6 +5,7 @@ import (
 	"CaseGo/internal/service"
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -109,12 +110,14 @@ func (e *Endpoint) GetCases(c *fiber.Ctx) error {
 }
 
 func (e *Endpoint) GetWeapons(c *fiber.Ctx) error {
-	var cases CaseRequest
+	params := c.Params("id")
 
-	if err := c.BodyParser(&cases); err != nil {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"status": "BadRequest"})
+	id, err := strconv.Atoi(params)
+	if err != nil {
+		return c.SendStatus(fiber.StatusBadRequest)
 	}
-	response := e.service.GetWeapons(cases.Id)
+
+	response := e.service.GetWeapons(id)
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "ok", "data": response})
 }
