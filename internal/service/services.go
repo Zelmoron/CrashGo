@@ -107,7 +107,7 @@ type Weapons struct {
 	Skin    string `json:"skin_name"`
 	Rarity  string `json:"rariry"`
 	Img     string `json:"steam_image"`
-	IsLoser bool   `json:"isLos<er"`
+	IsLoser bool   `json:"isLoser"`
 }
 
 func (s *Service) GetWeapons(id int) []Weapons {
