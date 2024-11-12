@@ -129,3 +129,24 @@ func (s *Service) GetWeapons(id int) []Weapons {
 	return weapons
 
 }
+
+func (s *Service) OpenCase(userId int, itemId int) models.ItemModel {
+	var item models.ItemModel
+
+	if err := s.db.First(&item, itemId).Error; err != nil {
+		return models.ItemModel{}
+	}
+
+	inventory := models.InventoryModel{
+
+		Name:       item.SkinName,
+		TelegramID: uint(userId),
+		Type:       item.Type,
+	}
+	if err := s.db.Create(&inventory).Error; err != nil {
+		return models.ItemModel{}
+	}
+
+	return item
+
+}

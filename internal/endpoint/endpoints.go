@@ -4,6 +4,7 @@ import (
 	"CaseGo/internal/models"
 	"CaseGo/internal/service"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -18,6 +19,7 @@ type (
 		GetInventory(int) []service.Inventory
 		GetCases() []service.Cases
 		GetWeapons(int) []service.Weapons
+		OpenCase(int, int) models.ItemModel
 	}
 
 	Endpoint struct {
@@ -127,4 +129,22 @@ func (e *Endpoint) GetWeapons(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "ok", "data": string(jsonBytes)})
+}
+
+type OpenRequest struct {
+	UserId int `json:userid"`
+
+	ItemId int `json:"itemid"`
+}
+
+func (e *Endpoint) OpenCase(c *fiber.Ctx) error {
+
+	var openReq OpenRequest
+
+	if err := c.BodyParser(&openReq); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"status": "BadRequest"})
+	}
+	response := e.service.OpenCase(openReq.UserId, openReq.ItemId)
+	fmt.Println(response)
+	return nil
 }
