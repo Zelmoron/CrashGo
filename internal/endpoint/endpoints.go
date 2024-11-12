@@ -4,7 +4,6 @@ import (
 	"CaseGo/internal/models"
 	"CaseGo/internal/service"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -145,6 +144,6 @@ func (e *Endpoint) OpenCase(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"status": "BadRequest"})
 	}
 	response := e.service.OpenCase(openReq.UserId, openReq.ItemId)
-	fmt.Println(response)
-	return nil
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "ok", "data": response})
 }
