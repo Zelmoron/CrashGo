@@ -40,10 +40,10 @@ func New() *App {
 
 func (a *App) routers() {
 	//Здесь хранятся роутеры
-	a.app.Get("/users", a.endpoint.GetUsers)         //Метод для получения конкретного пользователя
-	a.app.Post("/users", a.endpoint.CreateUser)      //Метод для проверки/добавления  пользователя
-	a.app.Get("/inventory", a.endpoint.GetInventory) //Метод для получения инвентаря
-	a.app.Get("/cases/cases", a.endpoint.GetCases)   //Метод для получения всех кейсов
+	a.app.Get("/users", a.endpoint.GetUsers)             //Метод для получения конкретного пользователя
+	a.app.Post("/users", a.endpoint.CreateUser)          //Метод для проверки/добавления  пользователя
+	a.app.Get("/inventory/:id", a.endpoint.GetInventory) //Метод для получения инвентаря
+	a.app.Get("/cases/cases", a.endpoint.GetCases)       //Метод для получения всех кейсов
 	a.app.Get("/cases/weapons/:id", a.endpoint.GetWeapons)
 }
 

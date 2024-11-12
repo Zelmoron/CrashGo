@@ -70,12 +70,14 @@ func (e *Endpoint) GetUsers(c *fiber.Ctx) error {
 }
 
 func (e *Endpoint) GetInventory(c *fiber.Ctx) error {
-	var user UserRequest
-	if err := c.BodyParser(&user); err != nil {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"status": "BadRequest"})
+	params := c.Params("id")
+
+	id, err := strconv.Atoi(params)
+	if err != nil {
+		return c.SendStatus(fiber.StatusBadRequest)
 	}
 
-	response := e.service.GetInventory(user.Id)
+	response := e.service.GetInventory(id)
 
 	if len(response) < 1 {
 
