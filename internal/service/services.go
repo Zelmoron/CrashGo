@@ -57,9 +57,11 @@ func (s *Service) CreateUser(id int, name string) models.UserModel {
 }
 
 type Inventory struct {
-	Name string  `json:"name"`
-	Cost float32 `json:"cost"`
-	Type string  `json:"type"`
+	Id     int    `json:"id"`
+	Name   string `json:"weapon_name"`
+	Skin   string `json:"skin_name"`
+	Rarity string `json:"rarity"`
+	Img    string `json:"steam_image"`
 }
 
 func (s *Service) GetInventory(id int) []Inventory {
@@ -73,7 +75,7 @@ func (s *Service) GetInventory(id int) []Inventory {
 	var inv []Inventory
 
 	for _, v := range inventory {
-		inv = append(inv, Inventory{v.Name, v.Cost, v.Type})
+		inv = append(inv, Inventory{v.SkinId, v.WeaponName, v.SkinName, v.Type, v.Image})
 	}
 
 	return inv
@@ -138,8 +140,10 @@ func (s *Service) OpenCase(userId int, itemId int) models.ItemModel {
 	}
 
 	inventory := models.InventoryModel{
-
-		Name:       item.SkinName,
+		SkinId:     item.ID,
+		WeaponName: item.WeaponName,
+		SkinName:   item.SkinName,
+		Image:      item.Image,
 		TelegramID: uint(userId),
 		Type:       item.Type,
 	}

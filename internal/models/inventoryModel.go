@@ -9,10 +9,12 @@ import (
 type InventoryModel struct {
 	ID         uint           `gorm:"primaryKey"`
 	TelegramID uint           `gorm:"not null"`
-	Name       string         `gorm:"type:varchar(50)"`
+	SkinId     int            `gorm:"size:255"`
+	WeaponName string         `gorm:"size:255"`
+	SkinName   string         `gorm:"size:255"`
+	Image      string         `gorm:"size:500"`
 	Type       string         `gorm:"type:varchar(50)"`
-	Image      string         `gorm:"type:varchar(50)"`
-	Cost       float32        `gorm:"type:float;default:0" validate:"gte=0"`
+	Price      float64        `gorm:"type:float"`
 	CreatedAt  time.Time      `gorm:"autoCreateTime"`
 	UpdatedAt  time.Time      `gorm:"autoUpdateTime"`
 	DeletedAt  gorm.DeletedAt `gorm:"index"`

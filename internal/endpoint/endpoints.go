@@ -131,7 +131,7 @@ func (e *Endpoint) GetWeapons(c *fiber.Ctx) error {
 }
 
 type OpenRequest struct {
-	UserId int `json:id"`
+	UserId int `json:"id"`
 
 	ItemId int `json:"item_id"`
 }
