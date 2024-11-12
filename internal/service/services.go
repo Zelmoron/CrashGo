@@ -105,7 +105,7 @@ type Weapons struct {
 	Id      int    `json:"id"`
 	Name    string `json:"weapon_name"`
 	Skin    string `json:"skin_name"`
-	Rarity  string `json:"rariry"`
+	Rarity  string `json:"rarity"`
 	Img     string `json:"steam_image"`
 	IsLoser bool   `json:"isLoser"`
 }
