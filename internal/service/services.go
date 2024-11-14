@@ -2,32 +2,33 @@ package service
 
 import (
 	"CaseGo/internal/models"
-	"fmt"
-	"log"
-
-	"gorm.io/gorm"
 )
 
-type Service struct {
-	db *gorm.DB //поле для базы данных
+type Repository interface {
+	InsertUser(int, string) models.UserModel
+	SelectUser(int) models.UserModel
+	SelectInventory(int) []models.InventoryModel
+	SelectCases() []models.CasesModel
+	SelectWeapons(int) []models.ItemModel
+	InsertInventory(int, int) models.ItemModel
 }
 
-func New(db *gorm.DB) *Service {
+type Service struct {
+	repository Repository
+}
+
+func New(repository Repository) *Service {
 	//возвращаем указатель на с.Service
 	return &Service{
 
-		db: db, // Поле для бд
+		repository: repository,
 	}
 }
 
 func (s *Service) GetUsers(id int) models.UserModel {
 	//бизнес логика для получения пользователя
 
-	var user models.UserModel
-
-	if err := s.db.Where("telegram_id=?", id).First(&user).Error; err != nil {
-		return user
-	}
+	user := s.repository.SelectUser(id)
 
 	return user
 }
@@ -36,44 +37,28 @@ func (s *Service) CreateUser(id int, name string) models.UserModel {
 
 	//бизнес логика для проверки/добавления пользователя
 
-	var user models.UserModel
+	user := s.repository.InsertUser(id, name)
 
-	if err := s.db.Where("telegram_id=?", id).First(&user).Error; err == nil {
-		log.Println("Уже есть")
-		return user
-	}
-
-	user = models.UserModel{
-		Name:       name,
-		TelegramID: id,
-		Coins:      100,
-	}
-	if err := s.db.Create(&user).Error; err != nil {
-		return user
-	}
-	log.Println("Новый")
 	return user
 
 }
 
 type Inventory struct {
-	Name string  `json:"name"`
-	Cost float32 `json:"cost"`
-	Type string  `json:"type"`
+	Id     int    `json:"id"`
+	Name   string `json:"weapon_name"`
+	Skin   string `json:"skin_name"`
+	Rarity string `json:"rarity"`
+	Img    string `json:"steam_image"`
 }
 
 func (s *Service) GetInventory(id int) []Inventory {
 	//бизнес логика доя получения инывентаря
-	var inventory []models.InventoryModel
 
-	if err := s.db.Where("telegram_id=?", id).Find(&inventory).Error; err != nil {
-		return []Inventory{}
-	}
-
+	inventory := s.repository.SelectInventory(id)
 	var inv []Inventory
 
 	for _, v := range inventory {
-		inv = append(inv, Inventory{v.Name, v.Cost, v.Type})
+		inv = append(inv, Inventory{v.SkinId, v.WeaponName, v.SkinName, v.Type, v.Image})
 	}
 
 	return inv
@@ -89,11 +74,7 @@ type Cases struct {
 func (s *Service) GetCases() []Cases {
 	//бизнес логика для получения кейсов
 
-	var cases []models.CasesModel
-
-	if err := s.db.Find(&cases).Error; err != nil {
-		return []Cases{}
-	}
+	cases := s.repository.SelectCases()
 	var casesAll []Cases
 	for _, v := range cases {
 		casesAll = append(casesAll, Cases{v.ID, v.Name, v.Image})
@@ -102,28 +83,31 @@ func (s *Service) GetCases() []Cases {
 }
 
 type Weapons struct {
-	Name   string `json:"weapon_name"`
-	Skin   string `json:"skin_name"`
-	Rarity string `json:"rariry"`
-	Img    string `json:"steam_image"`
+	Id      int    `json:"id"`
+	Name    string `json:"weapon_name"`
+	Skin    string `json:"skin_name"`
+	Rarity  string `json:"rarity"`
+	Img     string `json:"steam_image"`
+	IsLoser bool   `json:"isLoser"`
 }
 
 func (s *Service) GetWeapons(id int) []Weapons {
-	var cases models.CasesModel
 
-	if err := s.db.Preload("Items").First(&cases, id).Error; err != nil {
-		fmt.Println(1)
-		return []Weapons{}
-	}
-	weaponsData := cases.Items
-
+	weaponsData := s.repository.SelectWeapons(id)
 	var weapons []Weapons
 
 	for _, v := range weaponsData {
-		weapons = append(weapons, Weapons{Name: v.Name, Skin: v.Name, Rarity: v.Type, Img: v.Image})
+		weapons = append(weapons, Weapons{Id: v.ID, Name: v.WeaponName, Skin: v.SkinName, Rarity: v.Type, Img: v.Image, IsLoser: false})
 
 	}
 
 	return weapons
+
+}
+
+func (s *Service) OpenCase(userId int, itemId int) models.ItemModel {
+	item := s.repository.InsertInventory(userId, itemId)
+
+	return item
 
 }
