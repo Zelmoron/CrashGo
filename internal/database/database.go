@@ -2,98 +2,96 @@ package database
 
 import (
 	"CaseGo/internal/models"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
-	"net/http"
-	"net/url"
 	"os"
-	"time"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-type Database struct{}
-
-type MarketPriceResponse struct {
-	Success     bool   `json:"success"`
-	LowestPrice string `json:"lowest_price"`
-	Volume      string `json:"volume"`
-	MedianPrice string `json:"median_price"`
+type Database struct {
+	db *gorm.DB
 }
+
+// type MarketPriceResponse struct {
+// 	Success     bool   `json:"success"`
+// 	LowestPrice string `json:"lowest_price"`
+// 	Volume      string `json:"volume"`
+// 	MedianPrice string `json:"median_price"`
+// }
 
 func New() *Database {
 	return &Database{}
 }
-func getSteamMarketPrices(appID int, marketHashName string, attempts int) ([]string, error) {
-	marketHashName = url.QueryEscape(marketHashName)
-	requestURL := fmt.Sprintf("https://steamcommunity.com/market/priceoverview/?appid=%d&currency=1&market_hash_name=%s", appID, marketHashName)
 
-	var prices []string
+// func getSteamMarketPrices(appID int, marketHashName string, attempts int) ([]string, error) {
+// 	marketHashName = url.QueryEscape(marketHashName)
+// 	requestURL := fmt.Sprintf("https://steamcommunity.com/market/priceoverview/?appid=%d&currency=1&market_hash_name=%s", appID, marketHashName)
 
-	for i := 0; i < attempts; i++ {
-		resp, err := http.Get(requestURL)
-		if err != nil {
-			fmt.Printf("Request %d failed: %v\n", i+1, err)
-			continue
-		}
+// 	var prices []string
 
-		body, err := ioutil.ReadAll(resp.Body)
-		resp.Body.Close()
+// 	for i := 0; i < attempts; i++ {
+// 		resp, err := http.Get(requestURL)
+// 		if err != nil {
+// 			fmt.Printf("Request %d failed: %v\n", i+1, err)
+// 			continue
+// 		}
 
-		if err != nil {
-			fmt.Printf("Reading response %d failed: %v\n", i+1, err)
-			continue
-		}
+// 		body, err := ioutil.ReadAll(resp.Body)
+// 		resp.Body.Close()
 
-		var priceResponse MarketPriceResponse
-		if err := json.Unmarshal(body, &priceResponse); err != nil {
-			fmt.Printf("Parsing response %d failed: %v\n", i+1, err)
-			continue
-		}
+// 		if err != nil {
+// 			fmt.Printf("Reading response %d failed: %v\n", i+1, err)
+// 			continue
+// 		}
 
-		if !priceResponse.Success {
-			fmt.Printf("Request %d was not successful\n", i+1)
-			continue
-		}
+// 		var priceResponse MarketPriceResponse
+// 		if err := json.Unmarshal(body, &priceResponse); err != nil {
+// 			fmt.Printf("Parsing response %d failed: %v\n", i+1, err)
+// 			continue
+// 		}
 
-		if priceResponse.LowestPrice != "" {
-			prices = append(prices, priceResponse.LowestPrice)
-		}
+// 		if !priceResponse.Success {
+// 			fmt.Printf("Request %d was not successful\n", i+1)
+// 			continue
+// 		}
 
-		// Добавляем задержку между запросами
-		time.Sleep(300 * time.Millisecond)
-	}
+// 		if priceResponse.LowestPrice != "" {
+// 			prices = append(prices, priceResponse.LowestPrice)
+// 		}
 
-	return prices, nil
-}
+// 		// Добавляем задержку между запросами
+// 		time.Sleep(300 * time.Millisecond)
+// 	}
 
-func (d *Database) API(item string) {
+// 	return prices, nil
+// }
 
-	appID := 730 // CS:GO
-	itemName := item
-	attempts := 1
+// func (d *Database) API(item string) {
 
-	prices, err := getSteamMarketPrices(appID, itemName, attempts)
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
+// 	appID := 730 // CS:GO
+// 	itemName := item
+// 	attempts := 1
 
-	if len(prices) == 0 {
-		fmt.Println("No prices found!")
-		return
-	}
+// 	prices, err := getSteamMarketPrices(appID, itemName, attempts)
+// 	if err != nil {
+// 		fmt.Println("Error:", err)
+// 		return
+// 	}
 
-	for _, price := range prices {
-		fmt.Printf(price[1:])
-	}
+// 	if len(prices) == 0 {
+// 		fmt.Println("No prices found!")
+// 		return
+// 	}
 
-}
+// 	for _, price := range prices {
+// 		fmt.Printf(price[1:])
+// 	}
 
-func (d *Database) CreateTables() *gorm.DB {
+// }
+
+func (d *Database) CreateTables() {
 
 	host := os.Getenv("DB_HOST")
 	user := os.Getenv("DB_USER")
@@ -104,26 +102,27 @@ func (d *Database) CreateTables() *gorm.DB {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Irkutsk",
 		host, user, password, dbname, port)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	var err error
+	d.db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("database connection error: ", err)
 
 	}
 
-	if err := db.AutoMigrate(&models.UserModel{}); err != nil {
+	if err := d.db.AutoMigrate(&models.UserModel{}); err != nil {
 		log.Fatal("failed to migrate database:", err)
 		panic("Fatal error - dont create databases")
 	}
 
-	if err := db.AutoMigrate(&models.InventoryModel{}); err != nil {
+	if err := d.db.AutoMigrate(&models.InventoryModel{}); err != nil {
 		log.Fatal("failed to migrate database:", err)
 		panic("Fatal error - dont create databases")
 	}
-	if err := db.AutoMigrate(&models.ItemModel{}); err != nil {
+	if err := d.db.AutoMigrate(&models.ItemModel{}); err != nil {
 		log.Fatal("failed to migrate database:", err)
 		panic("Fatal error - dont create databases")
 	}
-	if err := db.AutoMigrate(&models.CasesModel{}); err != nil {
+	if err := d.db.AutoMigrate(&models.CasesModel{}); err != nil {
 		log.Fatal("failed to migrate database:", err)
 		panic("Fatal error - dont create databases")
 	}
@@ -131,11 +130,11 @@ func (d *Database) CreateTables() *gorm.DB {
 	var case1, case2, case3 models.CasesModel
 
 	// Проверяем, существует ли уже кейс "Решающий момент"
-	result := db.Where("name = ?", "Решающий момент").First(&case1)
+	result := d.db.Where("name = ?", "Решающий момент").First(&case1)
 	if result.Error != nil {
 		// Если нет, создаем новый
 		case1 = models.CasesModel{Name: "Решающий момент", Image: "https://qliquiz.github.io/CaSeGO-front/images/cases/decisive_moment.png"}
-		db.Create(&case1)
+		d.db.Create(&case1)
 
 		// Теперь создаем элементы, связанные с кейсами
 		items := []models.ItemModel{
@@ -159,30 +158,115 @@ func (d *Database) CreateTables() *gorm.DB {
 
 		for _, item := range items {
 
-			d.API(item.WeaponName + " | " + item.SkinName + " (Minimal Wear)")
-			db.Create(&item)
+			// d.API(item.WeaponName + " | " + item.SkinName + " (Minimal Wear)")
+			d.db.Create(&item)
 		}
 
 	}
 
 	// Проверяем, существует ли уже кейс "Гидра"
-	result = db.Where("name = ?", "Гидра").First(&case2)
+	result = d.db.Where("name = ?", "Гидра").First(&case2)
 	if result.Error != nil {
 		// Если нет, создаем новый
 		case2 = models.CasesModel{Name: "Гидра", Image: "https://qliquiz.github.io/CaSeGO-front/images/cases/hydra.png"}
-		db.Create(&case2)
+		d.db.Create(&case2)
 	}
 
 	// Проверяем, существует ли уже кейс "Фальшион"
-	result = db.Where("name = ?", "Фальшион").First(&case3)
+	result = d.db.Where("name = ?", "Фальшион").First(&case3)
 	if result.Error != nil {
 		// Если нет, создаем новый
 		case3 = models.CasesModel{Name: "Фальшион", Image: "https://qliquiz.github.io/CaSeGO-front/images/cases/falchion.png"}
-		db.Create(&case3)
+		d.db.Create(&case3)
 	}
 
 	log.Println("Таблицы успешно созданы")
 
-	return db
+}
 
+func (d *Database) InsertUser(id int, name string) models.UserModel {
+	var user models.UserModel
+	if err := d.db.Where("telegram_id=?", id).First(&user).Error; err == nil {
+		log.Println("Уже есть")
+		return user
+	}
+
+	user = models.UserModel{
+		Name:       name,
+		TelegramID: id,
+		Coins:      100,
+	}
+	if err := d.db.Create(&user).Error; err != nil {
+		return user
+	}
+	log.Println("Новый")
+
+	return user
+
+}
+
+func (d *Database) SelectUser(id int) models.UserModel {
+	var user models.UserModel
+
+	if err := d.db.Where("telegram_id=?", id).First(&user).Error; err != nil {
+		return user
+	}
+
+	return user
+}
+
+func (d *Database) SelectInventory(id int) []models.InventoryModel {
+	var inventory []models.InventoryModel
+
+	if err := d.db.Where("telegram_id=?", id).Find(&inventory).Error; err != nil {
+		return []models.InventoryModel{}
+	}
+
+	return inventory
+}
+
+func (d *Database) SelectCases() []models.CasesModel {
+	var cases []models.CasesModel
+
+	if err := d.db.Find(&cases).Error; err != nil {
+		return []models.CasesModel{}
+	}
+
+	return cases
+
+}
+
+func (d *Database) SelectWeapons(id int) []models.ItemModel {
+	var cases models.CasesModel
+
+	if err := d.db.Preload("Items").First(&cases, id).Error; err != nil {
+		fmt.Println(1)
+		return []models.ItemModel{}
+	}
+	weaponsData := cases.Items
+
+	return weaponsData
+
+}
+
+func (d *Database) InsertInventory(userId int, itemId int) models.ItemModel {
+	var item models.ItemModel
+
+	if err := d.db.First(&item, itemId).Error; err != nil {
+		return models.ItemModel{}
+	}
+
+	inventory := models.InventoryModel{
+		SkinId:     item.ID,
+		WeaponName: item.WeaponName,
+		SkinName:   item.SkinName,
+		Image:      item.Image,
+		TelegramID: uint(userId),
+		Type:       item.Type,
+	}
+	if err := d.db.Create(&inventory).Error; err != nil {
+		return models.ItemModel{}
+	}
+
+	return item
 }

@@ -23,12 +23,12 @@ func New() *App {
 
 	a.database = database.New() //Получаем с. Database
 
-	db := a.database.CreateTables() //Получаем переменую тип *gorm.DB из метода структуры Database
+	a.database.CreateTables() //Получаем переменую тип *gorm.DB из метода структуры Database
 
 	a.app = fiber.New() //создаем приложение на Fiber
 	a.app.Use(cors.New(), logger.New())
 
-	a.service = service.New(db) //получаем с.Service
+	a.service = service.New(a.database) //получаем с.Service
 
 	a.endpoint = endpoint.New(a.service) //Получаем с.Endpoints( перед этим мы посылаем структуру Service в интерфейс, а также переменную db)
 
@@ -44,8 +44,8 @@ func (a *App) routers() {
 	a.app.Post("/users", a.endpoint.CreateUser)            //Метод для проверки/добавления  пользователя
 	a.app.Get("/inventory/:id", a.endpoint.GetInventory)   //Метод для получения инвентаря
 	a.app.Get("/cases/cases", a.endpoint.GetCases)         //Метод для получения всех кейсов
-	a.app.Get("/cases/weapons/:id", a.endpoint.GetWeapons) // Получить скины из кейсов
-	a.app.Post("/open", a.endpoint.OpenCase)
+	a.app.Get("/cases/weapons/:id", a.endpoint.GetWeapons) //Получить скины из кейсов
+	a.app.Post("/open", a.endpoint.OpenCase)               //Получить пушку в инвентарь
 }
 
 func (a *App) Run() {
