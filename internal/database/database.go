@@ -106,6 +106,7 @@ func (d *Database) CreateTables() {
 	d.db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("database connection error: ", err)
+		panic("Не удалось подключиться к базе данных")
 
 	}
 
