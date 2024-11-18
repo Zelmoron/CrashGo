@@ -166,6 +166,7 @@ func (d *Database) CreateTables() {
 
 			// d.API(item.WeaponName + " | " + item.SkinName + " (Minimal Wear)")
 			d.db.Create(&item)
+
 		}
 
 	}
@@ -176,6 +177,23 @@ func (d *Database) CreateTables() {
 		// Если нет, создаем новый
 		case2 = models.CasesModel{Name: "Гидра", Image: "https://qliquiz.github.io/CaSeGO-front/images/cases/hydra.png"}
 		d.db.Create(&case2)
+		// Теперь создаем элементы, связанные с кейсами
+		items := []models.ItemModel{
+			{WeaponName: "Тест1", SkinName: "Ночной бунт", Type: "milspec", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpotLO_JAlf0Ob3czRY49KJhomEg8j4OrzZgiUD7pUp3rHDp9v00QXj-UtrY2_xJ4aTJAI3aV_QqQe3lL3vg8Tu7s-c1zI97Wr-owub", CaseID: case2.ID},
+			{WeaponName: "Тест2", SkinName: "Алоха", Type: "milspec", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpopb3wflFfwOP3YjoXv4-JlYyEn_bLP7LWnn8fuJZwi7GXptqt2FW2-UFuYGDxINfAe1VsNFCC_Ve4w7_ngcDuvZvLmmwj5Hc11_x0mg", CaseID: case2.ID},
+			// {WeaponName: "", SkinName: "", Type: "", Image: "", CaseID: case1.ID},
+			// {WeaponName: "", SkinName: "", Type: "", Image: "", CaseID: case1.ID},
+			// {WeaponName: "", SkinName: "", Type: "", Image: "", CaseID: case1.ID},
+			// {WeaponName: "", SkinName: "", Type: "", Image: "", CaseID: case1.ID},
+			// {WeaponName: "", SkinName: "", Type: "", Image: "", CaseID: case1.ID},
+		}
+
+		for _, item := range items {
+
+			// d.API(item.WeaponName + " | " + item.SkinName + " (Minimal Wear)")
+			d.db.Create(&item)
+
+		}
 	}
 
 	// Проверяем, существует ли уже кейс "Фальшион"
