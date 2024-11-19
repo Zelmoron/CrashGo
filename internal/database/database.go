@@ -187,7 +187,7 @@ func (d *Database) CreateTables() {
 			{WeaponName: "FAMAS", SkinName: "Макабр", Type: "milspec", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgposLuoKhRfwOP3dzxP7c-JmYGIlvXmNoTdn2xZ_Ism37GTpNmljQbgqkVlamvxdo6UdlI4M13W-lG6wuzo0JS-vZTBwHI3pGB8svCrsedC", CaseID: case2.ID},
 			{WeaponName: "UMP-45", SkinName: "Металлические цветы", Type: "milspec", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpoo7e1f1Jf0uL3ZDBSuImJkoyKmvLyP7TGk3lu5Mx2gv2PrI-giVGwqUFtMj31IICUJAY5Z1nT_VTtxO29gJbqvJ7JnyNj7yEitmGdwULd1U8dAw", CaseID: case2.ID},
 			{WeaponName: "Tec-9", SkinName: "Трафарет", Type: "milspec", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpoor-mcjhhwszcdD4b09--lYyAqOf1J6_UhGVu5Mx2gv2P8Nyh2gGw-xJpZTqiIdeXcAI-M1_R_li7kOu605Tu75mYn3I2syMh5GGdwULq_VC6dg", CaseID: case2.ID},
-			{WeaponName: "", SkinName: "", Type: "", Image: "", CaseID: case2.ID},
+			{WeaponName: "1", SkinName: "", Type: "", Image: "", CaseID: case2.ID},
 			{WeaponName: "", SkinName: "", Type: "", Image: "", CaseID: case2.ID},
 			{WeaponName: "", SkinName: "", Type: "", Image: "", CaseID: case2.ID},
 			{WeaponName: "", SkinName: "", Type: "", Image: "", CaseID: case2.ID},
