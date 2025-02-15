@@ -218,6 +218,7 @@ func (d *Database) CreateTables() {
 
 func (d *Database) InsertUser(id int, name string) models.UserModel {
 	var user models.UserModel
+	id = 19234 // хардкод временно
 	if err := d.db.Where("telegram_id=?", id).First(&user).Error; err == nil {
 		log.Println("Уже есть")
 		return user
