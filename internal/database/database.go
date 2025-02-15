@@ -119,10 +119,13 @@ func (d *Database) CreateTables() {
 		log.Fatal("failed to migrate database:", err)
 		panic("Fatal error - dont create databases")
 	}
+	d.db.Migrator().DropTable(&models.ItemModel{})
 	if err := d.db.AutoMigrate(&models.ItemModel{}); err != nil {
 		log.Fatal("failed to migrate database:", err)
 		panic("Fatal error - dont create databases")
 	}
+
+	d.db.Migrator().DropTable(&models.CasesModel{})
 	if err := d.db.AutoMigrate(&models.CasesModel{}); err != nil {
 		log.Fatal("failed to migrate database:", err)
 		panic("Fatal error - dont create databases")
@@ -150,7 +153,12 @@ func (d *Database) CreateTables() {
 			{WeaponName: "UMP-45", SkinName: "Арктический волк", Type: "restricted", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpoo7e1f1Jf0Ob3ZDBSuImJg4iCg_LLNbrfkVRd4cJ5nqfHo9_02QSw_hY5YmGmJ4aRd1dqNwyDrFi4wrzmhZC77p6bySNl6CQq-z-DyN1nM0Y5", CaseID: case1.ID},
 			{WeaponName: "Nova", SkinName: "Nova | Дикая шестёрка", Type: "restricted", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpouLWzKjhnwMzGfitD0924l4iEhf7gNoTdn2xZ_Isl27DDrdqsigHn-kU-ZW6iItPBdAE9NAyBrAW-yea-jMK9us7Jz3QwpGB8ssgBFjCg", CaseID: case1.ID},
 			{WeaponName: "Glock-18", SkinName: "Лунная ночь", Type: "restricted", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgposbaqKAxf0vL3djFN79eJxdi0guX2MrXum2Re5vp3j__E57P5gVO8v109Y2vxI9Cdc1M6ZQyCq1e2kLy90JO1ucnNy3U3vCJ07CnUn0HmiBEYcKUx0m01ug-1", CaseID: case1.ID},
-			// {WeaponName: "", SkinName: "", Type: "", Image: "", CaseID: case1.ID},
+			{WeaponName: "AUG", SkinName: "Stymphalian", Type: "classified", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpot6-iFABz7PLddgJR-MW7hIiKm_71PYTTn3lV-_p9g-7J4cKl0ADkqEdpNzvyJ47EcgE8Zl2D-FO7wb_vjZ696sjOzHA1uCdx43_cgVXp1nDtdJ8l", CaseID: case1.ID},
+			{WeaponName: "AWP", SkinName: "Mortis", Type: "classified", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpot621FABz7PLfYQJG6d2inL-HnvD8J_WAz2lV7cAh3uyX9Nz33FXnqUs6a2rxctKdJ1c_aQ6Fq1DrxOvn05Tpot2XnvIeBIAw", CaseID: case1.ID},
+			{WeaponName: "USP-S", SkinName: "Cortex", Type: "classified", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpoo6m1FBRp3_bGcjhQ09-jq5WYh8j3Jq_ummJW4NE_376S84-tiwHt_0VqZDzwI47DcVNqaFDZ-gLrxea918S5tJucwSY2uj5iuygjNe-uOA", CaseID: case1.ID},
+			{WeaponName: "MP7", SkinName: "Bloodsport", Type: "covert", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpou6ryFABz7P7YJgJA4NO5kJObmOXgDLfYkWNFpsRz3-qSpdis2AW3rhFvYWn3LISSdgRsYVzR8lC7lOm9gMO_786bwHd9-n51Z2R5ZH4", CaseID: case1.ID},
+			{WeaponName: "M4A4", SkinName: "Neo-Noir", Type: "covert", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpou-6kejhjxszFJTwW09Kzm7-FmP7mDLfYkWNFpsch2evFo9Wl2lflr0RtZzilJNTBdgE3ZAyDr1nrx-vs0cK9vsmamnt9-n51UgTl8ms", CaseID: case1.ID},
+			{WeaponName: "★ Перчатки «Гидра»", SkinName: "Мангры", Type: "rare", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DAR0hwIQFTibK8LxVh7PTEfitH_-O0mI-Ek__7JrXVqWNI7Ndwte7T8In7t1ixqgc0NiucedPWKmlsIwmTuT7imLm3wYjotZvJmCQy7HQr7XePmBPm1RoaOLZt0PKZHF-eAfRKGfWCByXQssoiVmz0TgaZmGto", CaseID: case1.ID},
 			// {WeaponName: "", SkinName: "", Type: "", Image: "", CaseID: case1.ID},
 			// {WeaponName: "", SkinName: "", Type: "", Image: "", CaseID: case1.ID},
 			// {WeaponName: "", SkinName: "", Type: "", Image: "", CaseID: case1.ID},
@@ -161,6 +169,7 @@ func (d *Database) CreateTables() {
 
 			// d.API(item.WeaponName + " | " + item.SkinName + " (Minimal Wear)")
 			d.db.Create(&item)
+
 		}
 
 	}
@@ -171,6 +180,28 @@ func (d *Database) CreateTables() {
 		// Если нет, создаем новый
 		case2 = models.CasesModel{Name: "Гидра", Image: "https://qliquiz.github.io/CaSeGO-front/images/cases/hydra.png"}
 		d.db.Create(&case2)
+		// Теперь создаем элементы, связанные с кейсами
+		items := []models.ItemModel{
+			{WeaponName: "MAG-7", SkinName: "Насыщенная вода", Type: "milspec", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpou7uifDhh3szFcDoV09-3gZOfnvTLP7LWnn8fuZYiiOvH9NXz21ey80FuYz_7cdSQdwM4NVyE_1Xvxujp1sC975ScyWwj5HeAY-I7KQ", CaseID: case2.ID},
+			{WeaponName: "MAC-10", SkinName: "Алоха", Type: "milspec", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpou7umeldf0v73fDxBvYyJlYyEn_bLP7LWnn8fsZ1w3OiY8dTw3QDir0BtNm-mdtLEIAZrZViGrFPvkOzrjcDuvZ_PmGwj5HfqJxVUTQ", CaseID: case2.ID},
+			{WeaponName: "FAMAS", SkinName: "Макабр", Type: "milspec", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgposLuoKhRfwOP3dzxP7c-JmYGIlvXmNoTdn2xZ_Ism37GTpNmljQbgqkVlamvxdo6UdlI4M13W-lG6wuzo0JS-vZTBwHI3pGB8svCrsedC", CaseID: case2.ID},
+			{WeaponName: "UMP-45", SkinName: "Металлические цветы", Type: "milspec", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpoo7e1f1Jf0uL3ZDBSuImJkoyKmvLyP7TGk3lu5Mx2gv2PrI-giVGwqUFtMj31IICUJAY5Z1nT_VTtxO29gJbqvJ7JnyNj7yEitmGdwULd1U8dAw", CaseID: case2.ID},
+			{WeaponName: "Tec-9", SkinName: "Трафарет", Type: "milspec", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpoor-mcjhhwszcdD4b09--lYyAqOf1J6_UhGVu5Mx2gv2P8Nyh2gGw-xJpZTqiIdeXcAI-M1_R_li7kOu605Tu75mYn3I2syMh5GGdwULq_VC6dg", CaseID: case2.ID},
+			{WeaponName: "1", SkinName: "", Type: "", Image: "", CaseID: case2.ID},
+			{WeaponName: "", SkinName: "", Type: "", Image: "", CaseID: case2.ID},
+			{WeaponName: "", SkinName: "", Type: "", Image: "", CaseID: case2.ID},
+			{WeaponName: "", SkinName: "", Type: "", Image: "", CaseID: case2.ID},
+			{WeaponName: "", SkinName: "", Type: "", Image: "", CaseID: case2.ID},
+			{WeaponName: "", SkinName: "", Type: "", Image: "", CaseID: case2.ID},
+			{WeaponName: "", SkinName: "", Type: "", Image: "", CaseID: case2.ID},
+		}
+
+		for _, item := range items {
+
+			// d.API(item.WeaponName + " | " + item.SkinName + " (Minimal Wear)")
+			d.db.Create(&item)
+
+		}
 	}
 
 	// Проверяем, существует ли уже кейс "Фальшион"
@@ -187,6 +218,7 @@ func (d *Database) CreateTables() {
 
 func (d *Database) InsertUser(id int, name string) models.UserModel {
 	var user models.UserModel
+	id = 19234 // хардкод временно
 	if err := d.db.Where("telegram_id=?", id).First(&user).Error; err == nil {
 		log.Println("Уже есть")
 		return user
