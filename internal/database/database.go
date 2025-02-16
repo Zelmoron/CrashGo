@@ -137,7 +137,7 @@ func (d *Database) CreateTables() {
 	result := d.db.Where("name = ?", "Решающий момент").First(&case1)
 	if result.Error != nil {
 		// Если нет, создаем новый
-		case1 = models.CasesModel{Name: "Решающий момент", Image: "https://qliquiz.github.io/CaSeGO-front/images/cases/decisive_moment.png"}
+		case1 = models.CasesModel{Name: "Решающий момент", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFY5naqQIz4R7Yjix9bZkvKiZrmAzzlTu5AoibiT8d_x21Wy8hY_MWz1doSLMlhpM3FKbNs"}
 		d.db.Create(&case1)
 
 		// Теперь создаем элементы, связанные с кейсами
@@ -178,7 +178,7 @@ func (d *Database) CreateTables() {
 	result = d.db.Where("name = ?", "Гидра").First(&case2)
 	if result.Error != nil {
 		// Если нет, создаем новый
-		case2 = models.CasesModel{Name: "Гидра", Image: "https://qliquiz.github.io/CaSeGO-front/images/cases/hydra.png"}
+		case2 = models.CasesModel{Name: "Гидра", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFY3navMJWgQtNm1ldLZzvOiZr-BlToIsZcoi-yTpdutiVW2-Es4NWjwIo-LMlhpinMS53M"}
 		d.db.Create(&case2)
 		// Теперь создаем элементы, связанные с кейсами
 		items := []models.ItemModel{
@@ -208,7 +208,7 @@ func (d *Database) CreateTables() {
 	result = d.db.Where("name = ?", "Фальшион").First(&case3)
 	if result.Error != nil {
 		// Если нет, создаем новый
-		case3 = models.CasesModel{Name: "Фальшион", Image: "https://qliquiz.github.io/CaSeGO-front/images/cases/falchion.png"}
+		case3 = models.CasesModel{Name: "Фальшион", Image: "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FF8ugPDMIWpAuIq1w4KIlaChZOyFwzgJuZNy3-2T89T0jlC2rhZla2vwIJjVLFHz75yKpg"}
 		d.db.Create(&case3)
 	}
 
@@ -218,7 +218,6 @@ func (d *Database) CreateTables() {
 
 func (d *Database) InsertUser(id int, name string) models.UserModel {
 	var user models.UserModel
-	id = 19234 // хардкод временно
 	if err := d.db.Where("telegram_id=?", id).First(&user).Error; err == nil {
 		log.Println("Уже есть")
 		return user
